@@ -20,11 +20,10 @@ Create the project
 If you are starting from scratch, the official walkthrough uses:
 
 ```bash
-dotnet new console -n MyFirstMCP
-cd MyFirstMCP
-dotnet add package ModelContextProtocol --prerelease
+dotnet new console -n DemoMCP
+cd DemoMCP
+dotnet add package ModelContextProtocol
 dotnet add package Microsoft.Extensions.Hosting
-```
 
 This project already includes the relevant packages in DemoMCP.csproj.
 
@@ -42,32 +41,14 @@ The startup code in Program.cs does three important things:
 2. Registers the MCP server and stdio transport with AddMcpServer() and WithStdioServerTransport().
 3. Scans the assembly for tool classes with WithToolsFromAssembly().
 
-The core startup code looks like this:
-
-```csharp
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using ModelContextProtocol.Server;
-using System.ComponentModel;
-
-var builder = Host.CreateApplicationBuilder(args);
-builder.Logging.AddConsole(consoleLogOptions =>
-{
-    consoleLogOptions.LogToStandardErrorThreshold = LogLevel.Trace;
-});
-
-builder.Services
-    .AddMcpServer()
-    .WithStdioServerTransport()
-    .WithToolsFromAssembly();
-
-await builder.Build().RunAsync();
-```
+The core startup code is in Program.cs file
 
 How to define tools
 -------------------
 Tools are discovered from classes marked with [McpServerToolType]. Each public static method that is decorated with [McpServerTool] becomes an MCP tool.
+McpServerTool has a Description which will be fed into any client connecting
+to the server. This description helps the client determine which tool to call.
+
 
 Example:
 
@@ -86,7 +67,8 @@ In this sample, EcoTool.cs defines the available tools:
 
 Run the server
 --------------
-From the project folder, build and run with:
+From the project folder, right click the csproj file and hit Build or
+build and run with:
 
 ```bash
 dotnet build
