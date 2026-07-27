@@ -77,7 +77,7 @@ dotnet run
 
 Use it from VS Code
 -------------------
-To test the server from Visual Studio Code, add a server entry to your .vscode/mcp.json file:
+To test the server from Visual Studio Code, add a server entry to your .vscode/mcp.json file. Then start the mcp server. The mcp server should be now discoverable in github copliot tools window
 
 ```json
 {
